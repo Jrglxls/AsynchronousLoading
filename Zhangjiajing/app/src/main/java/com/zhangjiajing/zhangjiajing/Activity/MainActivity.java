@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.zhangjiajing.zhangjiajing.Adapter.NewsAdapter;
 import com.zhangjiajing.zhangjiajing.R;
+import com.zhangjiajing.zhangjiajing.domain.NewsBean;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +25,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 异步加载
+ */
 public class MainActivity extends Activity implements View.OnClickListener{
     private ImageView ivIcon;
     private ListView lvListView;

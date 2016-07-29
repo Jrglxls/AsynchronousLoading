@@ -8,14 +8,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.zhangjiajing.zhangjiajing.Activity.ImageLoader;
-import com.zhangjiajing.zhangjiajing.Activity.NewsBean;
+import com.zhangjiajing.zhangjiajing.ImageLoader.ImageLoader;
+import com.zhangjiajing.zhangjiajing.domain.NewsBean;
 import com.zhangjiajing.zhangjiajing.R;
 
 import java.util.List;
 
 /**
  * Created by zhangjiajing on 2016/7/28.
+ * ListView适配器
  */
 public class NewsAdapter extends BaseAdapter {
 

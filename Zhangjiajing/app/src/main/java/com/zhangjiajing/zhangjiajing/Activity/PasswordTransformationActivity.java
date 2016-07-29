@@ -5,6 +5,7 @@ import android.view.View;
 
 /**
  * Created by zhangjiajing on 2016/7/26.
+ * 密码有圆点变星号
  */
 public class PasswordTransformationActivity extends PasswordTransformationMethod {
     @Override

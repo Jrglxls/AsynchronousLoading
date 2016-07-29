@@ -1,7 +1,8 @@
-package com.zhangjiajing.zhangjiajing.Activity;
+package com.zhangjiajing.zhangjiajing.domain;
 
 /**
  * Created by zhangjiajing on 2016/7/28.
+ * ListView item实体类
  */
 public class NewsBean {
     private String newsIconUrl;

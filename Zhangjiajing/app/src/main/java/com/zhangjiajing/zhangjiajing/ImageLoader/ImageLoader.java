@@ -1,4 +1,4 @@
-package com.zhangjiajing.zhangjiajing.Activity;
+package com.zhangjiajing.zhangjiajing.ImageLoader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +17,7 @@ import java.net.URL;
 
 /**
  * Created by zhangjiajing on 2016/7/28.
+ * 图片缓存
  */
 public class ImageLoader {
     private ImageView mImageView;
@@ -66,7 +67,7 @@ public class ImageLoader {
             mImageView.setImageBitmap((Bitmap) msg.obj);
         }
     };
-
+    
     //多线程加载图片
     public void showImageByThread(ImageView imageView, final String url){
         mImageView = imageView;
