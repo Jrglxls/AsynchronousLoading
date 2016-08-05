@@ -1,4 +1,4 @@
-package com.zhangjiajing.zhangjiajing;
+package com.zjjLruCache.zjjLruCache;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

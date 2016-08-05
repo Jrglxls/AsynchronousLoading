@@ -1,4 +1,4 @@
-package com.zhangjiajing.zhangjiajing.Activity;
+package com.zjjLruCache.zjjLruCache.Activity;
 
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;

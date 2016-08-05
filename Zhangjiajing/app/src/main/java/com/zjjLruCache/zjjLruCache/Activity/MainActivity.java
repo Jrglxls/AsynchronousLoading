@@ -1,4 +1,4 @@
-package com.zhangjiajing.zhangjiajing.Activity;
+package com.zjjLruCache.zjjLruCache.Activity;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.zhangjiajing.zhangjiajing.Adapter.NewsAdapter;
-import com.zhangjiajing.zhangjiajing.R;
-import com.zhangjiajing.zhangjiajing.domain.NewsBean;
+import com.zjjLruCache.zjjLruCache.Adapter.NewsAdapter;
+import com.zjjLruCache.zjjLruCache.R;
+import com.zjjLruCache.zjjLruCache.domain.NewsBean;
 
 import org.json.JSONArray;
 import org.json.JSONException;

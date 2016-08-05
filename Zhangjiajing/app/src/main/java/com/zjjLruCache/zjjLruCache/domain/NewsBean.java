@@ -1,4 +1,4 @@
-package com.zhangjiajing.zhangjiajing.domain;
+package com.zjjLruCache.zjjLruCache.domain;
 
 /**
  * Created by zhangjiajing on 2016/7/28.

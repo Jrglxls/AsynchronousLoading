@@ -1,4 +1,4 @@
-package com.zhangjiajing.zhangjiajing.ImageLoader;
+package com.zjjLruCache.zjjLruCache.ImageLoader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

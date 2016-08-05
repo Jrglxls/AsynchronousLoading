@@ -1,4 +1,4 @@
-package com.zhangjiajing.zhangjiajing.Adapter;
+package com.zjjLruCache.zjjLruCache.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.zhangjiajing.zhangjiajing.ImageLoader.ImageLoader;
-import com.zhangjiajing.zhangjiajing.domain.NewsBean;
-import com.zhangjiajing.zhangjiajing.R;
+import com.zjjLruCache.zjjLruCache.ImageLoader.ImageLoader;
+import com.zjjLruCache.zjjLruCache.domain.NewsBean;
+import com.zjjLruCache.zjjLruCache.R;
 
 import java.util.List;
 
