@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 /**
  * Created by Jrglxls on 2016/8/9.
+ * ContentProvider基础知识
  */
 public class MyContentProvider extends ContentProvider{
     //在ContentProvider创建后被调用
