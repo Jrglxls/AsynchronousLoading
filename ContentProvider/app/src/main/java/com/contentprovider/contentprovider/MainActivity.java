@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         //插入电话信息
         contentValues.put(ContactsContract.CommonDataKinds.Phone.NUMBER, "13409965689");
         //指定type
-        contentValues.put(ContactsContract.CommonDataKinds.Phone.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+        contentValues.put(ContactsContract.CommonDataKinds.Phone.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
         //执行插入语句
         contentResolver.insert(ContactsContract.Data.CONTENT_URI,contentValues);
     }
