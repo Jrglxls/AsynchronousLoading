@@ -1,0 +1,317 @@
+package jianke.library;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import github.nisrulz.easydeviceinfo.EasyAppMod;
+import github.nisrulz.easydeviceinfo.EasyDeviceMod;
+import github.nisrulz.easydeviceinfo.EasyDisplayMod;
+import github.nisrulz.easydeviceinfo.EasyIdMod;
+import github.nisrulz.easydeviceinfo.EasyNetworkMod;
+
+import static github.nisrulz.easydeviceinfo.EasyNetworkMod.CELLULAR_2G;
+import static github.nisrulz.easydeviceinfo.EasyNetworkMod.CELLULAR_3G;
+import static github.nisrulz.easydeviceinfo.EasyNetworkMod.CELLULAR_4G;
+import static github.nisrulz.easydeviceinfo.EasyNetworkMod.WIFI_WIFIMAX;
+
+/**
+ * Created by zhangjiajing on 2016/8/12.
+ */
+public class JKSystemParamsHelper {
+    public final static String TAG = "PARAMS";
+
+    private static JKSystemParamsHelper instance;
+
+    private Context context;
+
+    //    public String uuid;//设备唯一标识符
+    public String udid;//设备唯一标识符
+    public String adid;//广告唯一标识符
+    public String brand;//设备品牌
+    public String model;//设备型号
+    public String screen;//设备屏幕尺寸
+    public String os;//设备系统类型
+    public String osVersion;//设备系统版本号
+    public String clientVersion;//应用版本
+    public String clientBuild;//clientBuild
+    public String geo;//地理位置
+    public String networkType;//网络类型
+    public String channel;//下载渠道
+
+    private EasyDeviceMod deviceMod;
+    private EasyIdMod idMod;
+    private EasyAppMod appMod;
+    private EasyDisplayMod displayMod;
+    private EasyNetworkMod networkMod;
+
+
+    public synchronized static JKSystemParamsHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new JKSystemParamsHelper(context);
+        }
+        return instance;
+    }
+
+    private JKSystemParamsHelper(Context context) {
+        this.context = context;
+        EasyIdMod idMod = new EasyIdMod(context);
+        idMod.getAndroidAdId(new EasyIdMod.AdIdentifierCallback() {
+            @Override
+            public void onSuccess(String adIdentifier, boolean adDonotTrack) {
+                JKSystemParamsHelper.this.adid = adIdentifier;
+            }
+        });
+    }
+
+    public static Map<String, String> getDefaultParams(Context context) {
+        Map<String, String> result = new HashMap<>();
+        JKSystemParamsHelper paramsHelper = JKSystemParamsHelper.getInstance(context);
+
+        // 使用反射机制将ParamHolder所有String类型的属性写入到params中
+        java.lang.reflect.Method[] methods = JKSystemParamsHelper.class.getDeclaredMethods();
+        Pattern pattern = Pattern.compile("^get(\\w+)");
+        for (java.lang.reflect.Method method : methods) {
+            if (method.getReturnType().equals(String.class)) {
+                Matcher matcher = pattern.matcher(method.getName());
+                if (matcher.find()) {
+
+                    String key = matcher.group(1);
+                    key = key.substring(0, 1).toLowerCase() + key.substring(1);
+                    try {
+                        String value = (String) method.invoke(paramsHelper);
+                        if (value != null)
+                            result.put(key, value);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.w(TAG, "can't get param: " + key, e);
+                    }
+                }
+
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 设备唯一标识符
+     * @return
+     */
+    public String getUdid() {
+        if (isEmpty(this.udid)) {
+            this.udid = getDeviceMod().getIMEI();
+        }
+        return udid;
+    }
+
+    /**
+     * //广告唯一标识符
+     * @return
+     */
+    public String getAdid() {
+        return adid;
+    }
+
+    /**
+     * 设备品牌
+     * @return
+     */
+    public String getBrand() {
+        if (isEmpty(this.brand)) {
+            brand = getDeviceMod().getBuildBrand();
+        }
+        return brand;
+    }
+
+    /**
+     * 设备型号
+     * @return
+     */
+    public String getModel() {
+        if (isEmpty(model)) {
+            model = getDeviceMod().getModel();
+        }
+        return model;
+    }
+
+    /**
+     * 设备屏幕尺寸
+     * @return
+     */
+    public String getScreen() {
+        if (isEmpty(screen)) {
+            screen = getDisplayMod().getResolution();
+        }
+        return screen;
+    }
+
+    /**
+     * 设备系统类型
+     * @return
+     */
+    public String getOs() {
+        os = "Android";
+        return os;
+    }
+
+    /**
+     * 设备系统版本号
+     * @return
+     */
+    public String getOsVersion() {
+        if (isEmpty(osVersion)) {
+            osVersion = getDeviceMod().getOSVersion();
+        }
+        return osVersion;
+    }
+
+    /**
+     * 应用版本
+     * @return
+     */
+    public String getClientVersion() {
+        if (isEmpty(clientVersion)) {
+            clientVersion = getAppMod().getAppVersion();
+        }
+        return clientVersion;
+    }
+
+    /**
+     * clientBuild
+     * @return
+     */
+    public String getClientBuild() {
+        if (isEmpty(clientBuild)) {
+            clientBuild = getAppMod().getAppVersionCode();
+        }
+        return clientBuild;
+    }
+
+    /**
+     * 获取地理位置
+     * @param context
+     * @return
+     */
+    public String getLocation(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        String locationProvider = "";
+        if (providers.contains(LocationManager.GPS_PROVIDER)) {
+            //如果是GPS
+            locationProvider = LocationManager.GPS_PROVIDER;
+        } else if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
+            //如果是Network
+            locationProvider = LocationManager.NETWORK_PROVIDER;
+        }
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        Location location = locationManager.getLastKnownLocation(locationProvider);
+        JSONObject address = new JSONObject();
+        try {
+            if(location != null){
+                address.put("lng", location.getLongitude());
+                address.put("lat", location.getLatitude());
+            }else {
+                address.put("lng", "0000000000");
+                address.put("lat", "0000000000");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        geo = address.toString();
+        return geo;
+    }
+
+    /**
+     * 网络类型
+     * @return
+     */
+    public String getNetworkType() {
+        int type = getNetworkMod().getNetworkType();
+
+        switch (type) {
+            case WIFI_WIFIMAX:
+                networkType = "wifi";
+                break;
+            case CELLULAR_2G:
+            case CELLULAR_3G:
+            case CELLULAR_4G:
+                networkType = "mobile";
+                break;
+            default:
+                networkType = "unknown";
+        }
+        return networkType;
+    }
+
+    /**
+     * 下载渠道
+     * @return
+     */
+    public String getChannel() {
+        if (channel == null) {
+            try {
+                ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+                channel = info.metaData.getString("UMENG_CHANNEL");
+            } catch (PackageManager.NameNotFoundException e) {
+                channel = "";
+            }
+        }
+        return channel;
+    }
+
+    private boolean isEmpty(String str) {
+        return "".equals(str) || str == null;
+    }
+
+    public EasyDeviceMod getDeviceMod() {
+        if (deviceMod == null) {
+            deviceMod = new EasyDeviceMod(context);
+        }
+        return deviceMod;
+    }
+
+    public EasyIdMod getIdMod() {
+        if (idMod == null) {
+            idMod = new EasyIdMod(context);
+        }
+        return idMod;
+    }
+
+    public EasyAppMod getAppMod() {
+        if (appMod == null) {
+            appMod = new EasyAppMod(context);
+        }
+        return appMod;
+    }
+
+    public EasyDisplayMod getDisplayMod() {
+        if (displayMod == null) {
+            displayMod = new EasyDisplayMod(context);
+        }
+        return displayMod;
+    }
+
+    public EasyNetworkMod getNetworkMod() {
+        if (networkMod == null) {
+            networkMod = new EasyNetworkMod(context);
+        }
+        return networkMod;
+    }
+}

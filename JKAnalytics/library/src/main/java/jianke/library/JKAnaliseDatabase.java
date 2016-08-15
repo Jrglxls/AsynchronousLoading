@@ -16,11 +16,20 @@ public class JKAnaliseDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        String sql = "create table if not exists JKAnaliseTable(id integer PRIMARY KEY AUTOINCREMENT,UserId text,UserFlag text,pageId text,Referrer text,Timestamp text,eventId text,duration text,extras text,params text)";
+        sqLiteDatabase.execSQL(sql);
     }
+
+    /**
+     * 删除表
+     * @param sqLiteDatabase
+     * @param i
+     * @param i1
+     */
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
+
 }
