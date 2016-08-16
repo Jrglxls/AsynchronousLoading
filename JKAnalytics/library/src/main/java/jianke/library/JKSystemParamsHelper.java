@@ -31,6 +31,7 @@ import static github.nisrulz.easydeviceinfo.EasyNetworkMod.WIFI_WIFIMAX;
 
 /**
  * Created by zhangjiajing on 2016/8/12.
+ * extras参数设置
  */
 public class JKSystemParamsHelper {
     public final static String TAG = "PARAMS";
@@ -80,9 +81,9 @@ public class JKSystemParamsHelper {
 
     public static Map<String, String> getDefaultParams(Context context) {
         Map<String, String> result = new HashMap<>();
-        JKSystemParamsHelper paramsHelper = JKSystemParamsHelper.getInstance(context);
+        JKSystemParamsHelper jkSystemParamsHelper = JKSystemParamsHelper.getInstance(context);
 
-        // 使用反射机制将ParamHolder所有String类型的属性写入到params中
+        // 使用反射机制将JKSystemParamsHelper所有String类型的属性写入到params中
         java.lang.reflect.Method[] methods = JKSystemParamsHelper.class.getDeclaredMethods();
         Pattern pattern = Pattern.compile("^get(\\w+)");
         for (java.lang.reflect.Method method : methods) {
@@ -93,7 +94,7 @@ public class JKSystemParamsHelper {
                     String key = matcher.group(1);
                     key = key.substring(0, 1).toLowerCase() + key.substring(1);
                     try {
-                        String value = (String) method.invoke(paramsHelper);
+                        String value = (String) method.invoke(jkSystemParamsHelper);
                         if (value != null)
                             result.put(key, value);
                     } catch (Exception e) {

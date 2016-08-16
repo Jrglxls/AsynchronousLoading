@@ -7,8 +7,8 @@ public class JKAnalyticsInfo {
     /**
      * event事件获取的参数
      */
-    private String Appkey;//用户的唯一标示
-    private String UserId;//用户的唯一标示
+    private String Appkey;//用户的唯一标示 APP传
+    private String UserId;//用户的唯一标示 app传
     private String UserFlag;//用户是否登录
     private String pageId;//当前页面的标示
     private String Referrer;//上一个页面的标示
