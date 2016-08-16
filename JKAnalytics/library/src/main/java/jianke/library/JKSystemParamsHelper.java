@@ -121,7 +121,7 @@ public class JKSystemParamsHelper {
     }
 
     /**
-     * //广告唯一标识符
+     * 广告唯一标识符
      * @return
      */
     public String getAdid() {

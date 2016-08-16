@@ -20,12 +20,6 @@ public class JKAnaliseDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sql);
     }
 
-    /**
-     * 删除表
-     * @param sqLiteDatabase
-     * @param i
-     * @param i1
-     */
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {

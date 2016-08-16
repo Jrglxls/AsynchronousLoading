@@ -18,17 +18,84 @@ public class JKAnalyticsInfo {
     private String extras;//常用的参数
     private String param;//一些传递的参数
 
-//    private String uuid;//设备唯一标识符
-//    private String udid;//设备唯一标识符
-//    private String adid;//广告唯一标识符
-//    private String brand;//设备品牌
-//    private String model;//设备型号
-//    private String screen;//设备屏幕尺寸
-//    private String os;//设备系统类型
-//    private String osVersion;//设备系统版本号
-//    private String clientVersion;//应用版本
-//    private String clientBuild;//
-//    private String geo;//地理位置
-//    private String networkType;//网络类型
-//    private String channel;//下载渠道
+    public String getAppkey() {
+        return Appkey;
+    }
+
+    public void setAppkey(String appkey) {
+        Appkey = appkey;
+    }
+
+    public String getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
+
+    public String getUserFlag() {
+        return UserFlag;
+    }
+
+    public void setUserFlag(String userFlag) {
+        UserFlag = userFlag;
+    }
+
+    public String getPageId() {
+        return pageId;
+    }
+
+    public void setPageId(String pageId) {
+        this.pageId = pageId;
+    }
+
+    public String getReferrer() {
+        return Referrer;
+    }
+
+    public void setReferrer(String referrer) {
+        Referrer = referrer;
+    }
+
+    public String getTimestamp() {
+        return Timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        Timestamp = timestamp;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getExtras() {
+        return extras;
+    }
+
+    public void setExtras(String extras) {
+        this.extras = extras;
+    }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param;
+    }
+
 }
