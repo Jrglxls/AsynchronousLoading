@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,10 +15,16 @@ public class JKAnalytics {
     private Long startTime,endTime,duration;
     private String appKey;
     private JKAnalyticsInfo jkAnalyticsInfo;
+    private JKAnaliseDBOperate jkAnaliseDBOperate;
+    private Context context;
 
-    public void startWithAppkey(String appKey){
+    public void startWithAppkey(String appKey,Context context){
+        this.context = context;
+
         jkAnalyticsInfo = new JKAnalyticsInfo();
         jkAnalyticsInfo.setAppkey(appKey);
+        jkAnaliseDBOperate = new JKAnaliseDBOperate(context);
+
     }
 
 
@@ -47,9 +54,12 @@ public class JKAnalytics {
 //        jkAnalyticsInfo.setDuration();
         Map<String,String> maps = new JKSystemParamsHelper(context).getDefaultParams(context);
         jkAnalyticsInfo.setExtras(new Gson().toJson(maps));
+        //// TODO: 2016/8/17
+
 
 
         //将数据存入数据库
+        jkAnaliseDBOperate.insert(jkAnalyticsInfo);
     }
 
     /**
@@ -57,7 +67,8 @@ public class JKAnalytics {
      */
     public void sendRequest(){
 
-
+        List<JKAnalyticsInfo> jkAnaliseInfoList = jkAnaliseDBOperate.getALLInfos();
+        // TODO: 2016/8/17
 
     }
 

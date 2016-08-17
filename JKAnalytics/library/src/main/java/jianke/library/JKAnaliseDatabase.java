@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class JKAnaliseDatabase extends SQLiteOpenHelper {
 
+
     public JKAnaliseDatabase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, null, 1);
     }
@@ -25,5 +26,7 @@ public class JKAnaliseDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
+
+
 
 }
