@@ -68,7 +68,7 @@ public class JKSystemParamsHelper {
         return instance;
     }
 
-    private JKSystemParamsHelper(Context context) {
+    public JKSystemParamsHelper(Context context) {
         this.context = context;
         EasyIdMod idMod = new EasyIdMod(context);
         idMod.getAndroidAdId(new EasyIdMod.AdIdentifierCallback() {

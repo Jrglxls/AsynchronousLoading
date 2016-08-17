@@ -13,7 +13,7 @@ public class JKAnalyticsInfo {
     private String pageId;//当前页面的标示
     private String Referrer;//上一个页面的标示
     private String Timestamp;//时间戳
-    private String eventId;//时间id
+    private String eventId;//事件id
     private String duration;//页面停留时间
     private String extras;//常用的参数
     private String param;//一些传递的参数
