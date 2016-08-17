@@ -31,7 +31,8 @@ public class JKAnalytics {
      */
     public void event(String eventId,String pageId){
         //获取参数赋值
-//        jkAnalyticsInfo.setDuration();
+        jkAnalyticsInfo.setDuration("sometime");//ok
+        jkAnalyticsInfo.setExtras("something");//ok
 
         //将数据存入数据库
     }
