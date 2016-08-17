@@ -49,7 +49,7 @@ public class JKSystemParamsHelper {
     public String os;//设备系统类型
     public String osVersion;//设备系统版本号
     public String clientVersion;//应用版本
-    public String clientBuild;//clientBuild
+    public String clientBuild;//客户端的编译版本号
     public String geo;//地理位置
     public String networkType;//网络类型
     public String channel;//下载渠道
@@ -193,7 +193,7 @@ public class JKSystemParamsHelper {
     }
 
     /**
-     * clientBuild
+     * 客户端的编译版本号
      * @return
      */
     public String getClientBuild() {
@@ -204,7 +204,7 @@ public class JKSystemParamsHelper {
     }
 
     /**
-     * 获取地理位置
+     * 地理位置
      * @param context
      * @return
      */
@@ -248,12 +248,12 @@ public class JKSystemParamsHelper {
 
         switch (type) {
             case WIFI_WIFIMAX:
-                networkType = "wifi";
+                networkType = "WIFI";
                 break;
             case CELLULAR_2G:
             case CELLULAR_3G:
             case CELLULAR_4G:
-                networkType = "mobile";
+                networkType = "Mobile";
                 break;
             default:
                 networkType = "unknown";

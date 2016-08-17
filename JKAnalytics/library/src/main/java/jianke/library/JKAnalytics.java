@@ -48,6 +48,7 @@ public class JKAnalytics {
         Map<String,String> maps = new JKSystemParamsHelper(context).getDefaultParams(context);
         jkAnalyticsInfo.setExtras(new Gson().toJson(maps));
 
+
         //将数据存入数据库
     }
 

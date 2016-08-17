@@ -7,16 +7,17 @@ public class JKAnalyticsInfo {
     /**
      * event事件获取的参数
      */
-    private String Appkey;//用户的唯一标示 APP传
-    private String UserId;//用户的唯一标示 app传
-    private String UserFlag;//用户是否登录
-    private String pageId;//当前页面的标示
+    private String Appkey;//用户的唯一标示 OK
+    private String UserId;//用户的唯一标示 CommonDatas.getUserId() OK
+    private String UserFlag;//用户是否登录 CommonDatas.getLogin() OK
+    private String pageId;//当前页面的标示 OK
     private String Referrer;//上一个页面的标示
-    private String Timestamp;//时间戳
-    private String eventId;//事件id
-    private String duration;//页面停留时间
-    private String extras;//常用的参数
-    private String param;//一些传递的参数
+
+    private String Timestamp;//时间戳 System.currentTimeMillis() + "" OK
+    private String eventId;//事件id OK
+    private String duration;//页面停留时间    ok
+    private String extras;//常用的参数       ok
+    private String params;//一些传递的参数
 
     public String getAppkey() {
         return Appkey;
@@ -90,12 +91,12 @@ public class JKAnalyticsInfo {
         this.extras = extras;
     }
 
-    public String getParam() {
-        return param;
+    public String getParams() {
+        return params;
     }
 
-    public void setParam(String param) {
-        this.param = param;
+    public void setParams(String params) {
+        this.params = params;
     }
 
 }
