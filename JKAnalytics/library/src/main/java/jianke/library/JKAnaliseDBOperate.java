@@ -9,17 +9,18 @@ import java.util.List;
 
 /**
  * Created by Jrglxls on 2016/8/17.
+ * 操作数据库
  */
 public class JKAnaliseDBOperate {
 
     private Context context;
-    private JKAnaliseDatabase jkAnaliseDatabase;
+    private JKAnaliseHelper jkAnaliseHelper;
     private SQLiteDatabase db;
 
     public JKAnaliseDBOperate(Context context) {
         this.context = context;
-        jkAnaliseDatabase = new JKAnaliseDatabase(context,"JKAnalise",null,1);
-        db = jkAnaliseDatabase.getWritableDatabase();
+        jkAnaliseHelper = new JKAnaliseHelper(context,"JKAnalise",null,1);
+        db = jkAnaliseHelper.getWritableDatabase();
     }
 
     public void insert(JKAnalyticsInfo jkAnalyticsInfo) {
@@ -32,7 +33,7 @@ public class JKAnaliseDBOperate {
                              jkAnalyticsInfo.getEventId(),
                              jkAnalyticsInfo.getDuration(),
                              jkAnalyticsInfo.getExtras(),
-                             jkAnalyticsInfo.getParams()});
+                             jkAnalyticsInfo.getParam()});
     }
 
     public void delete(int maxId){
@@ -42,12 +43,12 @@ public class JKAnaliseDBOperate {
     }
 
     public int getMaxId(){
-      Cursor c = db.rawQuery("select max id from JKAnaliseTable",null) ;
+      Cursor cursor = db.rawQuery("select max id from JKAnaliseTable",null) ;
         int maxId = 0;
-        while (c.moveToNext()){
-             maxId = c.getInt(c.getColumnIndex("id"));
+        while (cursor.moveToNext()){
+             maxId = cursor.getInt(cursor.getColumnIndex("id"));
         }
-        c.close();
+        cursor.close();
         return maxId;
     }
 
@@ -55,24 +56,22 @@ public class JKAnaliseDBOperate {
     public List<JKAnalyticsInfo> getALLInfos(){
         int maxId = getMaxId();
         List<JKAnalyticsInfo> jkAnalyticsInfoList = new ArrayList<JKAnalyticsInfo>();
-        Cursor c = db.rawQuery("select * from JKAnaliseTable where id <= ?",new String[]{maxId+""});
-        while (c.moveToNext()){
+        Cursor cursor = db.rawQuery("select * from JKAnaliseTable where id <= ?",new String[]{maxId+""});
+        while (cursor.moveToNext()){
             JKAnalyticsInfo jkAnalyticsInfo = new JKAnalyticsInfo();
-//            jkAnalyticsInfo.setAppkey(c.getString(c.getColumnIndex("appKey")));
-
-            jkAnalyticsInfo.setUserId(c.getString(c.getColumnIndex("UserId")));
-            jkAnalyticsInfo.setUserFlag(c.getString(c.getColumnIndex("UserFlag")));
-            jkAnalyticsInfo.setPageId(c.getString(c.getColumnIndex("PageId")));
-            jkAnalyticsInfo.setReferrer(c.getString(c.getColumnIndex("Referrer")));
-            jkAnalyticsInfo.setTimestamp(c.getString(c.getColumnIndex("Timestamp")));
-            jkAnalyticsInfo.setEventId(c.getString(c.getColumnIndex("EventId")));
-            jkAnalyticsInfo.setDuration(c.getString(c.getColumnIndex("Duration")));
-            jkAnalyticsInfo.setExtras(c.getString(c.getColumnIndex("Extras")));
-            jkAnalyticsInfo.setParams(c.getString(c.getColumnIndex("Params")));
+            jkAnalyticsInfo.setUserId(cursor.getString(cursor.getColumnIndex("UserId")));
+            jkAnalyticsInfo.setUserFlag(cursor.getString(cursor.getColumnIndex("UserFlag")));
+            jkAnalyticsInfo.setPageId(cursor.getString(cursor.getColumnIndex("PageId")));
+            jkAnalyticsInfo.setReferrer(cursor.getString(cursor.getColumnIndex("Referrer")));
+            jkAnalyticsInfo.setTimestamp(cursor.getString(cursor.getColumnIndex("Timestamp")));
+            jkAnalyticsInfo.setEventId(cursor.getString(cursor.getColumnIndex("EventId")));
+            jkAnalyticsInfo.setDuration(cursor.getString(cursor.getColumnIndex("Duration")));
+            jkAnalyticsInfo.setExtras(cursor.getString(cursor.getColumnIndex("Extras")));
+            jkAnalyticsInfo.setParam(cursor.getString(cursor.getColumnIndex("Params")));
 
             jkAnalyticsInfoList.add(jkAnalyticsInfo);
         }
-        c.close();
+        cursor.close();
 
         return jkAnalyticsInfoList;
     }

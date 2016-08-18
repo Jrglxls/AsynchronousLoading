@@ -6,12 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by zhangjiajing on 2016/8/12.
- * 数据库
+ * 创建
  */
-public class JKAnaliseDatabase extends SQLiteOpenHelper {
+public class JKAnaliseHelper extends SQLiteOpenHelper {
 
 
-    public JKAnaliseDatabase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public JKAnaliseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, null, 1);
     }
 
@@ -21,12 +21,9 @@ public class JKAnaliseDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sql);
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
-
-
 
 }

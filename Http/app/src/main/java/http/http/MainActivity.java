@@ -19,7 +19,16 @@ public class MainActivity extends Activity {
         handler = new Handler();
         ivImageView = (ImageView) findViewById(R.id.ivImageView);
 
-        //创建HttpThread对象 并调用start方法
-        new HttpThread("http://www.baidu.com",wvWebView,handler).start();
+//        /**
+//         * 使用WebView展示URL
+//         */
+//        //创建HttpThread对象 并调用start方法
+//        new HttpThread("http://www.baidu.com",wvWebView,handler).start();
+
+        /**
+         * 使用ImageView展示图片
+         */
+        new HttpThread("http://g.hiphotos.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=925ea2e391dda144ce0464e0d3debbc7/0ff41bd5ad6eddc4cf53b20b3fdbb6fd5366338d.jpg",
+                ivImageView,handler).start();
     }
 }

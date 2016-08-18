@@ -1,5 +1,7 @@
 package http.http;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.Handler;
 import android.webkit.WebView;
@@ -61,6 +63,7 @@ public class HttpThread extends Thread {
             InputStream inputStream =httpURLConnection.getInputStream();
             //进行读取 把图片下载到文件 设置文件输出流
             FileOutputStream fileOutputStream = null;
+            File downloadFile = null;
             //判断SD卡是否存在 SD卡是否挂载的参数
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
                 //如果SD卡挂载创建文件
@@ -69,7 +72,7 @@ public class HttpThread extends Thread {
                 //设置parent目录就是SD卡的目录
                 File parent =Environment.getExternalStorageDirectory();
                 //downloadFile，指定目录为SD卡的目录
-                File downloadFile = new File(parent,fileName);
+                downloadFile = new File(parent,fileName);
                 //向目录中写文件
                 fileOutputStream = new FileOutputStream(downloadFile);
             }
@@ -79,9 +82,26 @@ public class HttpThread extends Thread {
             //指定长度
             int length;
 
+            //写数据
             if (fileOutputStream!=null){
-
+                //读流 length不等于-1的情况下就表明一直有数据
+                while ((length = inputStream.read(bytes))!=-1 ){
+                    //从0开始到length写入
+                    fileOutputStream.write(bytes,0,length);
+                }
             }
+
+            //创建Bitmap 得到图片
+            final Bitmap bitmap = BitmapFactory.decodeFile(downloadFile.getAbsolutePath());
+
+            //更新UI
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //设置图片
+                    imageView.setImageBitmap(bitmap);
+                }
+            });
 
             /**
              * 使用WebView展示URL
