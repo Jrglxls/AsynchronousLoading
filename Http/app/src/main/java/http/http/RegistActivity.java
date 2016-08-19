@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 /**
  * Created by zhangjiajing on 2016/8/18.
+ * 使用HttpThreadRegist 和 HttpClientThread传递数据
  */
 public class RegistActivity extends Activity {
     //初始化
@@ -24,9 +25,21 @@ public class RegistActivity extends Activity {
         btnRegist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = null;
+                String url = null;//设置url
 
+                /**
+                 * 使用HttpThreadRegist传递数据
+                 */
                 new HttpThreadRegist(url,etName.getText().toString(),etAge.getText().toString()).start();
+                /**
+                 * 使用HttpClientThread传递数据 get方式
+                 */
+                url = url+"?name="+etName.getText().toString()+"&age="+ etAge.getText().toString();
+                new HttpClientThread(url);
+                /**
+                 * 使用HttpClientThread传递参数 post方式
+                 */
+                new HttpClientThread(url,etName.getText().toString(),etAge.getText().toString());
             }
         });
     }

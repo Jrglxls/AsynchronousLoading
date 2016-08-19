@@ -19,9 +19,9 @@ public class MainActivity extends Activity {
         handler = new Handler();
         ivImageView = (ImageView) findViewById(R.id.ivImageView);
 
-//        /**
-//         * 使用WebView展示URL
-//         */
+        /**
+         * 使用WebView展示URL
+         */
 //        //创建HttpThread对象 并调用start方法
 //        new HttpThread("http://www.baidu.com",wvWebView,handler).start();
 

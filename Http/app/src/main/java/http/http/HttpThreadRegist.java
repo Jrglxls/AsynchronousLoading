@@ -6,13 +6,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Properties;
 
 /**
  * Created by zhangjiajing on 2016/8/18.
+ * HttpThreadRegist传递数据
  */
 public class HttpThreadRegist extends Thread{
     //指定url参数
@@ -31,8 +35,12 @@ public class HttpThreadRegist extends Thread{
      * get方式传递数据
      */
     public void doGet(){
-        //重新构造url
-        url = url+"?name="+name+"&age="+age;
+        //重新构造url 中文转码
+        try {
+            url = url+"?name="+ URLEncoder.encode(name,"utf-8")+"&age="+age;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         try {
             //创建url对象 得到url
             URL httpUrl = new URL(url);
@@ -69,6 +77,9 @@ public class HttpThreadRegist extends Thread{
      */
     private void doPost(){
         try {
+            //获取当前系统默认的配置信息
+            Properties properties = System.getProperties();
+            Log.d("zjj",properties.toString());
             //创建url对象 得到url
             URL httpUrl = new URL(url);
             //得到HttpConnection对象
@@ -108,9 +119,9 @@ public class HttpThreadRegist extends Thread{
     @Override
     public void run() {
         super.run();
+        //运行get()方法
         doGet();
-
+        //运行post()方法
         doPost();
-
     }
 }
