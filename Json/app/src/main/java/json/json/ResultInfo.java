@@ -4,8 +4,9 @@ import java.util.List;
 
 /**
  * Created by zhangjiajing on 2016/8/20.
+ *
  */
-public class Result {
+public class ResultInfo {
     private int result;
     private List<PersonInfo> personData;
 

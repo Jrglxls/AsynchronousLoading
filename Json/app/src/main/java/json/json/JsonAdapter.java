@@ -35,6 +35,8 @@ public class JsonAdapter extends BaseAdapter{
     //创建只有一个参数的构造方法
     public JsonAdapter(Context context){
         this.context = context;
+        //初始化
+        layoutInflater = LayoutInflater.from(context);
     }
 
     //创建setData方法
@@ -78,7 +80,7 @@ public class JsonAdapter extends BaseAdapter{
         PersonInfo personInfo = list.get(i);
         //通过viewHolder设置界面信息
         viewHolder.tvName.setText(personInfo.getName());
-        viewHolder.tvAge.setText(personInfo.getAge());
+        viewHolder.tvAge.setText(""+personInfo.getAge());
 
         List<SchoolInfo> schoolInfos = personInfo.getSchoolInfo();
         SchoolInfo schoolInfo1 = schoolInfos.get(0);

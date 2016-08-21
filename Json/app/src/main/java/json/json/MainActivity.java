@@ -16,12 +16,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //设置result
-        Result result = new Result();
-        result.setResult(1);
+        ResultInfo resultInfo = new ResultInfo();
+        resultInfo.setResult(1);
 
-        //result.personData设置person数组
+        //resultInfo.personData设置person数组
         List<PersonInfo> list = new ArrayList<PersonInfo>();
-        result.setPersonData(list);
+        resultInfo.setPersonData(list);
 
         /**
          * 数据一
@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
 
         //实体数据创建完毕，需要调用json字符串
         Gson gson = new Gson();
-        System.out.println(gson.toJson(result));
-        Log.d("zjj", gson.toJson(result));
+        System.out.println(gson.toJson(resultInfo));
+        Log.d("zjj", gson.toJson(resultInfo));
     }
 }

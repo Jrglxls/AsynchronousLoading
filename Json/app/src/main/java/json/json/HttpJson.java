@@ -1,6 +1,8 @@
 package json.json;
 
 import android.content.Context;
+import android.os.Handler;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -22,6 +24,19 @@ import java.util.List;
 public class HttpJson extends Thread{
     private String url;
     private Context context;
+
+    private ListView listView;
+    private JsonAdapter jsonAdapter;
+
+    private Handler handler;
+
+    //创建构造方法
+    public HttpJson(String url,ListView listView,JsonAdapter jsonAdapter,Handler handler){
+        this.url = url;
+        this.listView = listView;
+        this.jsonAdapter = jsonAdapter;
+        this.handler = handler;
+    }
 
     @Override
     public void run() {
@@ -46,6 +61,17 @@ public class HttpJson extends Thread{
                 //通过StringBuffer去读取完毕
                 stringBuffer.append(str);
             }
+            //将解析的对象传进去
+            final List<PersonInfo> personInfos = parseJson(stringBuffer.toString());
+            //子线程向主线程发送消息
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    //将数据传递进去
+                    jsonAdapter.setData(personInfos);
+                    listView.setAdapter(jsonAdapter);
+                }
+            });
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
