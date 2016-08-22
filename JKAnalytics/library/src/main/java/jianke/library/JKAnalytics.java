@@ -41,7 +41,7 @@ public class JKAnalytics {
             public void run() {
                 sendRequest();
             }
-        },1000);
+        },4000);
     }
 
     /**
@@ -53,7 +53,6 @@ public class JKAnalytics {
         mUserId = UserId;
         mUserFlag = UserFlag;
     }
-
 
     /**
      * 两个时间戳相减的到时间差
@@ -118,7 +117,5 @@ public class JKAnalytics {
 
             }
         }
-
     }
-
 }

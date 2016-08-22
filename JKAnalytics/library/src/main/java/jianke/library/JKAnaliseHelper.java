@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by zhangjiajing on 2016/8/12.
- * 创建
+ * 创建数据库
  */
 public class JKAnaliseHelper extends SQLiteOpenHelper {
 

@@ -15,7 +15,6 @@ public class HttpPost {
     /**
      * Function  :   发送Post请求到服务器
      * Param     :   params请求体内容，encode编码格式
-     * Author    :   博客园-依旧淡然
      */
     public static String submitPostData(Map<String, String> params, String encode) {
         byte[] data = getRequestData(params, encode).toString().getBytes();//获得请求体
@@ -48,7 +47,6 @@ public class HttpPost {
     /**
      * Function  :   封装请求体信息
      * Param     :   params请求体内容，encode编码格式
-     * Author    :   博客园-依旧淡然
      */
     public static StringBuffer getRequestData(Map<String, String> params, String encode) {
         StringBuffer stringBuffer = new StringBuffer(); //存储封装好的请求体信息

@@ -75,10 +75,4 @@ public class JKAnaliseDBOperate {
 
         return jkAnalyticsInfoList;
     }
-
-    public void close(){
-        db.close();
-    }
-
-
 }
