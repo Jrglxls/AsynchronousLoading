@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -108,11 +109,16 @@ public class JKAnalytics {
 
         List<JKAnalyticsInfo> jkAnaliseInfoList = jkAnaliseDBOperate.getALLInfos();
         if (jkAnaliseInfoList!=null){
-            // TODO: 2016/8/17上传 成功删除已有数据
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("body", jkAnaliseInfoList.toString());
+            String result = HttpPost.submitPostData(params,"utf-8");
+            if (result.equals("success")){
+                jkAnaliseDBOperate.delete(maxId);
+            }else if (result.equals("failure")){
 
+            }
         }
 
     }
-
 
 }
