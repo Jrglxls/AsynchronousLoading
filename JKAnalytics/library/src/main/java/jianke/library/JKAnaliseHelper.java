@@ -10,14 +10,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class JKAnaliseHelper extends SQLiteOpenHelper {
 
-
     public JKAnaliseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String sql = "create table if not exists JKAnaliseTable(id integer PRIMARY KEY AUTOINCREMENT,UserId text,UserFlag text,pageId text,Referrer text,Timestamp text,eventId text,duration text,extras text,params text)";
+        String sql = "create table if not exists JKAnaliseTable(id integer PRIMARY KEY AUTOINCREMENT,Appkey text,UserId text,UserFlag text,pageId text,Referrer text,Timestamp text,EventId text,Duration text,Extras text,Param text)";
         sqLiteDatabase.execSQL(sql);
     }
 

@@ -1,6 +1,8 @@
 package jianke.library;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -8,8 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by zhangjiajing on 2016/8/12.
@@ -18,9 +18,22 @@ import java.util.TimerTask;
 public class JKAnalytics {
     private Long startTime,endTime,duration;
     private String mAppKey,mUserId,mUserFlag,mReferrer,mParam;
-    private JKAnalyticsInfo jkAnalyticsInfo;
+    JKAnalyticsInfo jkAnalyticsInfo= new JKAnalyticsInfo();
     private JKAnaliseDBOperate jkAnaliseDBOperate;
     private Context context;
+    private Handler handler;
+
+    /**
+     * 单例对象实例
+     */
+     private static JKAnalytics instance = null;
+
+     public synchronized static JKAnalytics getInstance() {
+     if (instance == null) {
+         instance = new JKAnalytics();
+        }
+     return instance;
+     }
 
     /**
      * 设置appKey，设置上传时间间隔
@@ -32,16 +45,16 @@ public class JKAnalytics {
         mAppKey = appKey;
 
         jkAnaliseDBOperate = new JKAnaliseDBOperate(context);
-        jkAnalyticsInfo = new JKAnalyticsInfo();
 
         //设置上传时间间隔
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                sendRequest();
-            }
-        },4000);
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                sendRequest();
+//            }
+//        },4000);
+        sendRequest();
     }
 
     /**
@@ -76,9 +89,9 @@ public class JKAnalytics {
     }
 
     /**
-    * event事件
+     * event事件
      * 设置Extras 设置eventId 设置pageId
-    */
+     */
     public void event(String eventId, String pageId, Context context){
         //获取参数赋值
         jkAnalyticsInfo.setAppkey(mAppKey);
@@ -98,24 +111,27 @@ public class JKAnalytics {
 
         //设置上一个页面 Referrer
         mReferrer = pageId;
-}
+    }
 
     /**
      * 发送请求
      */
     public void sendRequest(){
-        int maxId = jkAnaliseDBOperate.getMaxId();
+//        int maxId = jkAnaliseDBOperate.getMaxId();
 
         List<JKAnalyticsInfo> jkAnaliseInfoList = jkAnaliseDBOperate.getALLInfos();
+        Log.d("jrglxls", jkAnaliseInfoList.toString());
         if (jkAnaliseInfoList!=null){
             Map<String, String> params = new HashMap<String, String>();
             params.put("body", jkAnaliseInfoList.toString());
-            String result = HttpPost.submitPostData(params,"utf-8");
-            if (result.equals("success")){
-                jkAnaliseDBOperate.delete(maxId);
-            }else if (result.equals("failure")){
+//            String result = HttpPost.submitPostData(params,"utf-8");
+//            new HttpPostSendMessage(params,"utf-8",context,handler).start();
 
-            }
+//            if (result.equals("success")){
+//                jkAnaliseDBOperate.delete(maxId);
+//            }else if (result.equals("failure")){
+//
+//            }
         }
     }
 }

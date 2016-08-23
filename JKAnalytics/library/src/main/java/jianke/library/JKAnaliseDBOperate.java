@@ -3,6 +3,7 @@ package jianke.library;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,14 @@ public class JKAnaliseDBOperate {
 
     public JKAnaliseDBOperate(Context context) {
         this.context = context;
-        jkAnaliseHelper = new JKAnaliseHelper(context,"JKAnalise",null,1);
+        jkAnaliseHelper = new JKAnaliseHelper(context,"JKAnaliseTable",null,1);
         db = jkAnaliseHelper.getWritableDatabase();
     }
 
     public void insert(JKAnalyticsInfo jkAnalyticsInfo) {
-        db.execSQL("insert into JKAnaliseTable values (NULL,?,?,?,?,?,?,?,?,?) ",
-                new Object[]{jkAnalyticsInfo.getUserId(),
+        db.execSQL("insert into JKAnaliseTable values (NULL,?,?,?,?,?,?,?,?,?,?)",
+                new Object[]{jkAnalyticsInfo.getAppkey(),
+                             jkAnalyticsInfo.getUserId(),
                              jkAnalyticsInfo.getUserFlag(),
                              jkAnalyticsInfo.getPageId(),
                              jkAnalyticsInfo.getReferrer(),
@@ -43,11 +45,17 @@ public class JKAnaliseDBOperate {
     }
 
     public int getMaxId(){
-      Cursor cursor = db.rawQuery("select max id from JKAnaliseTable",null) ;
         int maxId = 0;
-        while (cursor.moveToNext()){
-             maxId = cursor.getInt(cursor.getColumnIndex("id"));
-        }
+        Cursor cursor = db.rawQuery("select * from JKAnaliseTable",null) ;
+            while (cursor.moveToNext()){
+                maxId = cursor.getInt(cursor.getColumnIndex("id"));
+                Log.d("jrglxls", String.valueOf(maxId));
+            }
+//        Cursor cursor = db.rawQuery("select isnull(max(id),-1) from JKAnaliseTable",null);
+//        if(cursor.moveToFirst()){
+//            maxId = cursor.getInt(cursor.getColumnIndex("id"));
+//            Logger.d("jrglxls", String.valueOf(maxId));
+//        }
         cursor.close();
         return maxId;
     }
@@ -57,22 +65,24 @@ public class JKAnaliseDBOperate {
         int maxId = getMaxId();
         List<JKAnalyticsInfo> jkAnalyticsInfoList = new ArrayList<JKAnalyticsInfo>();
         Cursor cursor = db.rawQuery("select * from JKAnaliseTable where id <= ?",new String[]{maxId+""});
-        while (cursor.moveToNext()){
-            JKAnalyticsInfo jkAnalyticsInfo = new JKAnalyticsInfo();
-            jkAnalyticsInfo.setUserId(cursor.getString(cursor.getColumnIndex("UserId")));
-            jkAnalyticsInfo.setUserFlag(cursor.getString(cursor.getColumnIndex("UserFlag")));
-            jkAnalyticsInfo.setPageId(cursor.getString(cursor.getColumnIndex("PageId")));
-            jkAnalyticsInfo.setReferrer(cursor.getString(cursor.getColumnIndex("Referrer")));
-            jkAnalyticsInfo.setTimestamp(cursor.getString(cursor.getColumnIndex("Timestamp")));
-            jkAnalyticsInfo.setEventId(cursor.getString(cursor.getColumnIndex("EventId")));
-            jkAnalyticsInfo.setDuration(cursor.getString(cursor.getColumnIndex("Duration")));
-            jkAnalyticsInfo.setExtras(cursor.getString(cursor.getColumnIndex("Extras")));
-            jkAnalyticsInfo.setParam(cursor.getString(cursor.getColumnIndex("Params")));
+        if (cursor!=null){
+            while (cursor.moveToNext()){
+                JKAnalyticsInfo jkAnalyticsInfo = new JKAnalyticsInfo();
+                jkAnalyticsInfo.setAppkey(cursor.getString(cursor.getColumnIndex("Appkey")));
+                jkAnalyticsInfo.setUserId(cursor.getString(cursor.getColumnIndex("UserId")));
+                jkAnalyticsInfo.setUserFlag(cursor.getString(cursor.getColumnIndex("UserFlag")));
+                jkAnalyticsInfo.setPageId(cursor.getString(cursor.getColumnIndex("PageId")));
+                jkAnalyticsInfo.setReferrer(cursor.getString(cursor.getColumnIndex("Referrer")));
+                jkAnalyticsInfo.setTimestamp(cursor.getString(cursor.getColumnIndex("Timestamp")));
+                jkAnalyticsInfo.setEventId(cursor.getString(cursor.getColumnIndex("EventId")));
+                jkAnalyticsInfo.setDuration(cursor.getString(cursor.getColumnIndex("Duration")));
+                jkAnalyticsInfo.setExtras(cursor.getString(cursor.getColumnIndex("Extras")));
+                jkAnalyticsInfo.setParam(cursor.getString(cursor.getColumnIndex("Param")));
 
-            jkAnalyticsInfoList.add(jkAnalyticsInfo);
+                jkAnalyticsInfoList.add(jkAnalyticsInfo);
+            }
         }
         cursor.close();
-
         return jkAnalyticsInfoList;
     }
 }
