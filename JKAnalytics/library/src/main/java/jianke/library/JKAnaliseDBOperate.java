@@ -15,16 +15,19 @@ import java.util.List;
 public class JKAnaliseDBOperate {
 
     private Context context;
-    private JKAnaliseHelper jkAnaliseHelper;
     private SQLiteDatabase db;
+    private JKAnaliseHelper jkAnaliseHelper;
 
     public JKAnaliseDBOperate(Context context) {
         this.context = context;
-        jkAnaliseHelper = new JKAnaliseHelper(context,"JKAnaliseTable",null,1);
-        db = jkAnaliseHelper.getWritableDatabase();
+        jkAnaliseHelper = JKAnaliseHelper.Instance(context);
     }
 
+    //添加数据
     public void insert(JKAnalyticsInfo jkAnalyticsInfo) {
+        if (!db.isOpen()){
+            db = jkAnaliseHelper.getWritableDatabase();
+        }
         db.execSQL("insert into JKAnaliseTable values (NULL,?,?,?,?,?,?,?,?,?,?)",
                 new Object[]{jkAnalyticsInfo.getAppkey(),
                              jkAnalyticsInfo.getUserId(),
@@ -36,34 +39,42 @@ public class JKAnaliseDBOperate {
                              jkAnalyticsInfo.getDuration(),
                              jkAnalyticsInfo.getExtras(),
                              jkAnalyticsInfo.getParam()});
+        db.close();
     }
 
+    //删除数据
     public void delete(int maxId){
-
+        if (!db.isOpen()){
+            db = jkAnaliseHelper.getWritableDatabase();
+        }
 //        int result = db.delete("JKAnalise","id <= ?",new String[]{maxId+""});
-    db.execSQL("delete from JKAnaliseTable where id <= ?",new Object[]{maxId});
+        db.execSQL("delete from JKAnaliseTable where id <= ?",new Object[]{maxId});
+        db.close();
     }
 
+    //获取最大id
     public int getMaxId(){
         int maxId = 0;
+        if (!db.isOpen()){
+            db = jkAnaliseHelper.getWritableDatabase();
+        }
         Cursor cursor = db.rawQuery("select * from JKAnaliseTable",null) ;
             while (cursor.moveToNext()){
                 maxId = cursor.getInt(cursor.getColumnIndex("id"));
                 Log.d("jrglxls", String.valueOf(maxId));
             }
-//        Cursor cursor = db.rawQuery("select isnull(max(id),-1) from JKAnaliseTable",null);
-//        if(cursor.moveToFirst()){
-//            maxId = cursor.getInt(cursor.getColumnIndex("id"));
-//            Logger.d("jrglxls", String.valueOf(maxId));
-//        }
         cursor.close();
+        db.close();
         return maxId;
     }
 
-
+    //获取所有数据
     public List<JKAnalyticsInfo> getALLInfos(){
         int maxId = getMaxId();
         List<JKAnalyticsInfo> jkAnalyticsInfoList = new ArrayList<JKAnalyticsInfo>();
+        if (!db.isOpen()){
+            db = jkAnaliseHelper.getWritableDatabase();
+        }
         Cursor cursor = db.rawQuery("select * from JKAnaliseTable where id <= ?",new String[]{maxId+""});
         if (cursor!=null){
             while (cursor.moveToNext()){
@@ -81,8 +92,9 @@ public class JKAnaliseDBOperate {
 
                 jkAnalyticsInfoList.add(jkAnalyticsInfo);
             }
+            cursor.close();
         }
-        cursor.close();
+        db.close();
         return jkAnalyticsInfoList;
     }
 }

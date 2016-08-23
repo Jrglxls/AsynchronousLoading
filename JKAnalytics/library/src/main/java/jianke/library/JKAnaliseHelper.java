@@ -10,14 +10,27 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class JKAnaliseHelper extends SQLiteOpenHelper {
 
-    public JKAnaliseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, null, 1);
+    private static JKAnaliseHelper instance;
+
+    public JKAnaliseHelper(Context context) {
+        super(context, "JKAnalise", null, 1);
     }
 
+    public static JKAnaliseHelper Instance(Context context) {
+        if (instance == null) {
+            instance = new JKAnaliseHelper(context);
+        }
+        return instance;
+    }
+
+    /**
+     * 创建表
+     * @param db
+     */
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    public void onCreate(SQLiteDatabase db) {
         String sql = "create table if not exists JKAnaliseTable(id integer PRIMARY KEY AUTOINCREMENT,Appkey text,UserId text,UserFlag text,pageId text,Referrer text,Timestamp text,EventId text,Duration text,Extras text,Param text)";
-        sqLiteDatabase.execSQL(sql);
+        db.execSQL(sql);
     }
 
     @Override
