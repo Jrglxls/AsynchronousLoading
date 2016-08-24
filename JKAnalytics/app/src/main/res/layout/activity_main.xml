@@ -10,6 +10,8 @@
     tools:context="jianke.jkanalytics.MainActivity">
 
     <TextView
+        android:id="@+id/event"
+        android:onClick="doClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!" />

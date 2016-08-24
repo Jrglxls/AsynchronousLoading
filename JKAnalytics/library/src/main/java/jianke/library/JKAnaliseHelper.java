@@ -9,13 +9,21 @@ import android.database.sqlite.SQLiteOpenHelper;
  * 创建数据库
  */
 public class JKAnaliseHelper extends SQLiteOpenHelper {
-
     private static JKAnaliseHelper instance;
 
+    /**
+     * 构造方法
+     * @param context
+     */
     public JKAnaliseHelper(Context context) {
         super(context, "JKAnalise", null, 1);
     }
 
+    /**
+     * 单例
+     * @param context
+     * @return
+     */
     public static JKAnaliseHelper Instance(Context context) {
         if (instance == null) {
             instance = new JKAnaliseHelper(context);
@@ -29,7 +37,7 @@ public class JKAnaliseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "create table if not exists JKAnaliseTable(id integer PRIMARY KEY AUTOINCREMENT,Appkey text,UserId text,UserFlag text,pageId text,Referrer text,Timestamp text,EventId text,Duration text,Extras text,Param text)";
+        String sql = "create table if not exists JKAnaliseTable(id integer PRIMARY KEY AUTOINCREMENT,Appkey text,UserId text,UserFlag text,PageId text,Referrer text,Timestamp text,EventId text,Duration text,Extras text,Param text)";
         db.execSQL(sql);
     }
 
@@ -37,5 +45,4 @@ public class JKAnaliseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
-
 }

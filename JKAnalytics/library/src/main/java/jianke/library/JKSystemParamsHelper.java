@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,18 +42,19 @@ public class JKSystemParamsHelper {
 
     private Context context;
 
-    //    public String uuid;//设备唯一标识符
-    public String udid;//设备唯一标识符
-    public String adid;//广告唯一标识符
-    public String brand;//设备品牌
-    public String model;//设备型号
-    public String screen;//设备屏幕尺寸
-    public String os;//设备系统类型
-    public String osVersion;//设备系统版本号
-    public String clientVersion;//应用版本
-    public String clientBuild;//客户端的编译版本号
+    public String uuid;//设备唯一标识符 ok
+    public String udid;//设备唯一标识符 ok
+
+    public String adid;//广告唯一标识符 ok
+    public String brand;//设备品牌 ok
+    public String model;//设备型号 ok
+    public String screen;//设备屏幕尺寸 ok
+    public String os;//设备系统类型 ok
+    public String osVersion;//设备系统版本号 ok
+    public String clientVersion;//应用版本 ok
+    public String clientBuild;//客户端的编译版本号  ok
     public String geo;//地理位置
-    public String networkType;//网络类型
+    public String networkType;//网络类型  ok
     public String channel;//下载渠道
 
     private EasyDeviceMod deviceMod;
@@ -111,6 +114,21 @@ public class JKSystemParamsHelper {
 
     /**
      * 设备唯一标识符
+     */
+    public String getUuid(){
+            final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            final String tmDevice, tmSerial, androidId;
+            tmDevice = "" + tm.getDeviceId();
+            tmSerial = "" + tm.getSimSerialNumber();
+            androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+            UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+            uuid = deviceUuid.toString();
+        return uuid;
+    }
+
+    /**
+     * 设备唯一标识符
      * @return
      */
     public String getUdid() {
@@ -125,6 +143,7 @@ public class JKSystemParamsHelper {
      * @return
      */
     public String getAdid() {
+        this.adid = "";
         return adid;
     }
 

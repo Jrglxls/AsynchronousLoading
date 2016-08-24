@@ -6,17 +6,23 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by zhangjiajing on 2016/8/12.
  *
  */
 public class JKAnalytics {
-    private Long startTime,endTime,duration;
+    private Long startTime,endTime;
     private String mAppKey,mUserId,mUserFlag,mReferrer,mParam;
     JKAnalyticsInfo jkAnalyticsInfo= new JKAnalyticsInfo();
     private JKAnaliseDBOperate jkAnaliseDBOperate;
@@ -24,7 +30,7 @@ public class JKAnalytics {
     private Handler handler;
 
     /**
-     * 单例对象实例
+     * 单例
      */
      private static JKAnalytics instance = null;
 
@@ -43,18 +49,16 @@ public class JKAnalytics {
     public void startWithAppkey(String appKey,Context context){
         this.context = context;
         mAppKey = appKey;
-
         jkAnaliseDBOperate = new JKAnaliseDBOperate(context);
 
         //设置上传时间间隔
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                sendRequest();
-//            }
-//        },4000);
-        sendRequest();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                sendRequest();
+            }
+        }, 20000);
     }
 
     /**
@@ -78,7 +82,6 @@ public class JKAnalytics {
     //获取退出页面的时间
     public void endLogPageView(){
         endTime = new Date().getTime();
-        duration = endTime-startTime;
     }
 
     /**
@@ -101,8 +104,9 @@ public class JKAnalytics {
         jkAnalyticsInfo.setReferrer(mReferrer);
         jkAnalyticsInfo.setTimestamp(String.valueOf(System.currentTimeMillis()));
         jkAnalyticsInfo.setEventId(eventId);
-        jkAnalyticsInfo.setDuration(duration.toString());
+        jkAnalyticsInfo.setDuration(String.valueOf(endTime - startTime));
         Map<String,String> maps = JKSystemParamsHelper.getDefaultParams(context);
+        Log.d("zjj",maps.toString());
         jkAnalyticsInfo.setExtras(new Gson().toJson(maps));
         jkAnalyticsInfo.setParam(mParam);
 
@@ -117,21 +121,31 @@ public class JKAnalytics {
      * 发送请求
      */
     public void sendRequest(){
-//        int maxId = jkAnaliseDBOperate.getMaxId();
-
+        JSONObject jsonObject = null;
+        JSONArray jsonArray = new JSONArray();
         List<JKAnalyticsInfo> jkAnaliseInfoList = jkAnaliseDBOperate.getALLInfos();
-        Log.d("jrglxls", jkAnaliseInfoList.toString());
         if (jkAnaliseInfoList!=null){
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("body", jkAnaliseInfoList.toString());
-//            String result = HttpPost.submitPostData(params,"utf-8");
-//            new HttpPostSendMessage(params,"utf-8",context,handler).start();
+            Log.d("zjj","jkAnaliseInfoList.size()="+jkAnaliseInfoList.size());
 
-//            if (result.equals("success")){
-//                jkAnaliseDBOperate.delete(maxId);
-//            }else if (result.equals("failure")){
-//
-//            }
+            for (int i = 0;i<jkAnaliseInfoList.size();i++){
+                Gson gson = new Gson();
+                try {
+                    jsonObject = new JSONObject(gson.toJson(jkAnaliseInfoList.get(i)));
+                    jsonArray.put(jsonObject);
+                    Log.d("zjj","jsonObject"+jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Map<String, String> params = new HashMap<String, String>();
+            if (jsonObject != null) {
+                params.put("body", jsonArray.toString());
+            }
+            Log.d("zjj", "params" + params);
+            //上传数据
+//            new HttpPostSendMessage(params,"utf-8",context,handler).start();
         }
     }
+
 }

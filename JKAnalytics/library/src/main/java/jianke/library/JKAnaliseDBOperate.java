@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jrglxls on 2016/8/17.
+ * Created by zhangjiajing on 2016/8/17.
  * 操作数据库
  */
 public class JKAnaliseDBOperate {
-
     private Context context;
     private SQLiteDatabase db;
     private JKAnaliseHelper jkAnaliseHelper;
@@ -23,11 +22,12 @@ public class JKAnaliseDBOperate {
         jkAnaliseHelper = JKAnaliseHelper.Instance(context);
     }
 
-    //添加数据
+    /**
+     * 添加数据
+     * @param jkAnalyticsInfo
+     */
     public void insert(JKAnalyticsInfo jkAnalyticsInfo) {
-        if (!db.isOpen()){
-            db = jkAnaliseHelper.getWritableDatabase();
-        }
+        db = jkAnaliseHelper.getWritableDatabase();
         db.execSQL("insert into JKAnaliseTable values (NULL,?,?,?,?,?,?,?,?,?,?)",
                 new Object[]{jkAnalyticsInfo.getAppkey(),
                              jkAnalyticsInfo.getUserId(),
@@ -42,43 +42,46 @@ public class JKAnaliseDBOperate {
         db.close();
     }
 
-    //删除数据
+    /**
+     * 删除数据
+     * @param maxId
+     */
     public void delete(int maxId){
-        if (!db.isOpen()){
-            db = jkAnaliseHelper.getWritableDatabase();
-        }
-//        int result = db.delete("JKAnalise","id <= ?",new String[]{maxId+""});
+        db = jkAnaliseHelper.getWritableDatabase();
         db.execSQL("delete from JKAnaliseTable where id <= ?",new Object[]{maxId});
         db.close();
     }
 
-    //获取最大id
+    /**
+     * 获取MaxId
+     * @return
+     */
     public int getMaxId(){
         int maxId = 0;
-        if (!db.isOpen()){
-            db = jkAnaliseHelper.getWritableDatabase();
-        }
+        db = jkAnaliseHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from JKAnaliseTable",null) ;
             while (cursor.moveToNext()){
                 maxId = cursor.getInt(cursor.getColumnIndex("id"));
-                Log.d("jrglxls", String.valueOf(maxId));
+                Log.d("zjj", String.valueOf(maxId));
             }
         cursor.close();
         db.close();
         return maxId;
     }
 
-    //获取所有数据
+    /**
+     * 获取所有数据
+     * @return
+     */
     public List<JKAnalyticsInfo> getALLInfos(){
         int maxId = getMaxId();
         List<JKAnalyticsInfo> jkAnalyticsInfoList = new ArrayList<JKAnalyticsInfo>();
-        if (!db.isOpen()){
-            db = jkAnaliseHelper.getWritableDatabase();
-        }
+        db = jkAnaliseHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from JKAnaliseTable where id <= ?",new String[]{maxId+""});
         if (cursor!=null){
             while (cursor.moveToNext()){
                 JKAnalyticsInfo jkAnalyticsInfo = new JKAnalyticsInfo();
+
                 jkAnalyticsInfo.setAppkey(cursor.getString(cursor.getColumnIndex("Appkey")));
                 jkAnalyticsInfo.setUserId(cursor.getString(cursor.getColumnIndex("UserId")));
                 jkAnalyticsInfo.setUserFlag(cursor.getString(cursor.getColumnIndex("UserFlag")));

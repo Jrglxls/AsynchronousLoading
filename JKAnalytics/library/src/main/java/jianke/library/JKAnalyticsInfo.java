@@ -1,7 +1,10 @@
 package jianke.library;
 
+import java.util.List;
+
 /**
  * Created by zhangjiajing on 2016/8/12.
+ *
  */
 public class JKAnalyticsInfo {
     /**
@@ -17,6 +20,16 @@ public class JKAnalyticsInfo {
     private String duration;//页面停留时间    ok
     private String extras;//常用的参数       ok
     private String param;//一些传递的参数
+
+    private List<JKAnalyticsInfo> jkAnalyticsInfoList;
+
+    public List<JKAnalyticsInfo> getJkAnalyticsInfoList() {
+        return jkAnalyticsInfoList;
+    }
+
+    public void setJkAnalyticsInfoList(List<JKAnalyticsInfo> jkAnalyticsInfoList) {
+        this.jkAnalyticsInfoList = jkAnalyticsInfoList;
+    }
 
     public String getAppkey() {
         return Appkey;
