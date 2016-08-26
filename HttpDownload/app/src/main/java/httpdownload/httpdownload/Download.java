@@ -58,7 +58,7 @@ public class Download {
                 HttpURLConnection httpURLConnection = (HttpURLConnection) httpUrl.openConnection();
                 //设置请求超时时间
                 httpURLConnection.setReadTimeout(5000);
-                //指定请求数据的长度
+                //指定请求数据的长度 请求头
                 httpURLConnection.setRequestProperty("Range", "byte=" + start + "-" + end);
                 //设置请求方法
                 httpURLConnection.setRequestMethod("GET");
