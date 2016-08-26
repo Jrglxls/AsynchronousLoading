@@ -36,33 +36,29 @@ import static github.nisrulz.easydeviceinfo.EasyNetworkMod.WIFI_WIFIMAX;
  * extras参数设置
  */
 public class JKSystemParamsHelper {
-    public final static String TAG = "PARAMS";
-
-    private static JKSystemParamsHelper instance;
-
     private Context context;
 
-    public String uuid;//设备唯一标识符 ok
-    public String udid;//设备唯一标识符 ok
-
-    public String adid;//广告唯一标识符 ok
-    public String brand;//设备品牌 ok
-    public String model;//设备型号 ok
-    public String screen;//设备屏幕尺寸 ok
-    public String os;//设备系统类型 ok
-    public String osVersion;//设备系统版本号 ok
-    public String clientVersion;//应用版本 ok
-    public String clientBuild;//客户端的编译版本号  ok
+    public String uuid;//设备唯一标识符
+    public String udid;//设备唯一标识符
+    public String adid;//广告唯一标识符
+    public String brand;//设备品牌
+    public String model;//设备型号
+    public String screen;//设备屏幕尺寸
+    public String os;//设备系统类型
+    public String osVersion;//设备系统版本号
+    public String clientVersion;//应用版本
+    public String clientBuild;//客户端的编译版本号
     public String geo;//地理位置
-    public String networkType;//网络类型  ok
+    public String networkType;//网络类型
     public String channel;//下载渠道
-
     private EasyDeviceMod deviceMod;
+
     private EasyIdMod idMod;
     private EasyAppMod appMod;
     private EasyDisplayMod displayMod;
     private EasyNetworkMod networkMod;
 
+    private static JKSystemParamsHelper instance;
 
     public synchronized static JKSystemParamsHelper getInstance(Context context) {
         if (instance == null) {
@@ -93,7 +89,6 @@ public class JKSystemParamsHelper {
             if (method.getReturnType().equals(String.class)) {
                 Matcher matcher = pattern.matcher(method.getName());
                 if (matcher.find()) {
-
                     String key = matcher.group(1);
                     key = key.substring(0, 1).toLowerCase() + key.substring(1);
                     try {
@@ -102,34 +97,30 @@ public class JKSystemParamsHelper {
                             result.put(key, value);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.w(TAG, "can't get param: " + key, e);
+                        Log.w("PARAMS", "can't get param: " + key, e);
                     }
                 }
-
             }
         }
-
         return result;
     }
 
     /**
      * 设备唯一标识符
      */
-    public String getUuid(){
-            final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            final String tmDevice, tmSerial, androidId;
-            tmDevice = "" + tm.getDeviceId();
-            tmSerial = "" + tm.getSimSerialNumber();
-            androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-            UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-            uuid = deviceUuid.toString();
+    public String getUuid() {
+        final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        final String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        uuid = deviceUuid.toString();
         return uuid;
     }
 
     /**
      * 设备唯一标识符
-     * @return
      */
     public String getUdid() {
         if (isEmpty(this.udid)) {
@@ -140,7 +131,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 广告唯一标识符
-     * @return
      */
     public String getAdid() {
         this.adid = "";
@@ -149,7 +139,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 设备品牌
-     * @return
      */
     public String getBrand() {
         if (isEmpty(this.brand)) {
@@ -160,7 +149,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 设备型号
-     * @return
      */
     public String getModel() {
         if (isEmpty(model)) {
@@ -171,7 +159,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 设备屏幕尺寸
-     * @return
      */
     public String getScreen() {
         if (isEmpty(screen)) {
@@ -182,7 +169,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 设备系统类型
-     * @return
      */
     public String getOs() {
         os = "Android";
@@ -191,7 +177,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 设备系统版本号
-     * @return
      */
     public String getOsVersion() {
         if (isEmpty(osVersion)) {
@@ -202,7 +187,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 应用版本
-     * @return
      */
     public String getClientVersion() {
         if (isEmpty(clientVersion)) {
@@ -213,7 +197,6 @@ public class JKSystemParamsHelper {
 
     /**
      * 客户端的编译版本号
-     * @return
      */
     public String getClientBuild() {
         if (isEmpty(clientBuild)) {
@@ -223,11 +206,9 @@ public class JKSystemParamsHelper {
     }
 
     /**
-     * 地理位置
-     * @param context
-     * @return
+     * 获取地理位置
      */
-    public String getLocation(Context context) {
+    public String getLocation() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
         String locationProvider = "";
@@ -260,11 +241,9 @@ public class JKSystemParamsHelper {
 
     /**
      * 网络类型
-     * @return
      */
     public String getNetworkType() {
         int type = getNetworkMod().getNetworkType();
-
         switch (type) {
             case WIFI_WIFIMAX:
                 networkType = "WIFI";

@@ -24,7 +24,6 @@ public class JKAnaliseDBOperate {
 
     /**
      * 添加数据
-     * @param jkAnalyticsInfo
      */
     public void insert(JKAnalyticsInfo jkAnalyticsInfo) {
         db = jkAnaliseHelper.getWritableDatabase();
@@ -44,7 +43,6 @@ public class JKAnaliseDBOperate {
 
     /**
      * 删除数据
-     * @param maxId
      */
     public void delete(int maxId){
         db = jkAnaliseHelper.getWritableDatabase();
@@ -54,7 +52,7 @@ public class JKAnaliseDBOperate {
 
     /**
      * 获取MaxId
-     * @return
+     * @return maxId
      */
     public int getMaxId(){
         int maxId = 0;
@@ -71,7 +69,7 @@ public class JKAnaliseDBOperate {
 
     /**
      * 获取所有数据
-     * @return
+     * @return jkAnalyticsInfoList
      */
     public List<JKAnalyticsInfo> getALLInfos(){
         int maxId = getMaxId();

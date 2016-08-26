@@ -13,7 +13,6 @@ public class JKAnaliseHelper extends SQLiteOpenHelper {
 
     /**
      * 构造方法
-     * @param context
      */
     public JKAnaliseHelper(Context context) {
         super(context, "JKAnalise", null, 1);
@@ -21,8 +20,6 @@ public class JKAnaliseHelper extends SQLiteOpenHelper {
 
     /**
      * 单例
-     * @param context
-     * @return
      */
     public static JKAnaliseHelper Instance(Context context) {
         if (instance == null) {
@@ -33,7 +30,6 @@ public class JKAnaliseHelper extends SQLiteOpenHelper {
 
     /**
      * 创建表
-     * @param db
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -43,6 +39,5 @@ public class JKAnaliseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
     }
 }

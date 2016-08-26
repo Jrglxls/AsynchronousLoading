@@ -14,8 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by zhangjiajing on 2016/8/12.
@@ -23,11 +21,10 @@ import java.util.TimerTask;
  */
 public class JKAnalytics {
     private Long startTime,endTime;
-    private String mAppKey,mUserId,mUserFlag,mReferrer,mParam;
+    private String mAppKey,mUserId,mUserFlag,mReferrer,mParam,duration;
     JKAnalyticsInfo jkAnalyticsInfo= new JKAnalyticsInfo();
     private JKAnaliseDBOperate jkAnaliseDBOperate;
     private Context context;
-    private Handler handler;
 
     /**
      * 单例
@@ -41,30 +38,32 @@ public class JKAnalytics {
      return instance;
      }
 
+
     /**
      * 设置appKey，设置上传时间间隔
-     * @param appKey
-     * @param context
      */
     public void startWithAppkey(String appKey,Context context){
         this.context = context;
         mAppKey = appKey;
         jkAnaliseDBOperate = new JKAnaliseDBOperate(context);
 
-        //设置上传时间间隔
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                sendRequest();
-            }
-        }, 20000);
+        runnable.run();
     }
 
     /**
+     * 设置上传时间
+     */
+    final Handler handler = new Handler();
+    Runnable runnable = new Runnable(){
+        @Override
+        public void run() {
+            sendRequest();
+            handler.postDelayed(this, 10000);
+        }
+    };
+
+    /**
      * 设置UserId 设置UserFlag
-     * @param UserId
-     * @param UserFlag
      */
     public void getUserIdAndUserFlag(String UserId,String UserFlag){
         mUserId = UserId;
@@ -82,6 +81,7 @@ public class JKAnalytics {
     //获取退出页面的时间
     public void endLogPageView(){
         endTime = new Date().getTime();
+        duration = String.valueOf(endTime - startTime);
     }
 
     /**
@@ -104,7 +104,7 @@ public class JKAnalytics {
         jkAnalyticsInfo.setReferrer(mReferrer);
         jkAnalyticsInfo.setTimestamp(String.valueOf(System.currentTimeMillis()));
         jkAnalyticsInfo.setEventId(eventId);
-        jkAnalyticsInfo.setDuration(String.valueOf(endTime - startTime));
+        jkAnalyticsInfo.setDuration(duration);
         Map<String,String> maps = JKSystemParamsHelper.getDefaultParams(context);
         Log.d("zjj",maps.toString());
         jkAnalyticsInfo.setExtras(new Gson().toJson(maps));
@@ -118,7 +118,7 @@ public class JKAnalytics {
     }
 
     /**
-     * 发送请求
+     * 上传数据
      */
     public void sendRequest(){
         JSONObject jsonObject = null;
@@ -143,8 +143,9 @@ public class JKAnalytics {
                 params.put("body", jsonArray.toString());
             }
             Log.d("zjj", "params" + params);
+
             //上传数据
-//            new HttpPostSendMessage(params,"utf-8",context,handler).start();
+//            new HttpPostSendMessage(params,"utf-8",context).start();
         }
     }
 
