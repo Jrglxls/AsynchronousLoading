@@ -1,6 +1,18 @@
 package httpdownload.httpdownload;
 
+import android.content.Entity;
+import android.os.Environment;
 import android.util.Log;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -27,9 +39,10 @@ public class UploadThread extends Thread{
 
     }
 
-    @Override
-    public void run() {
-        super.run();
+    private void HttpDownload(){
+        /**
+         * 多线程下载图片
+         */
         //表单分割线的描述符
         String boundary = "-------------------something";
         //前缀
@@ -101,5 +114,46 @@ public class UploadThread extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 使用HttpClient上传图片
+     */
+    private void HttpClient(){
+        //创建HttpClient对象
+        HttpClient httpClient = new DefaultHttpClient();
+        //创建HttpPost对象 将url传递进来
+        HttpPost httpPost = new HttpPost(url);
+        //创建MultipartEntity对象
+        MultipartEntity mutipartEntity = new MultipartEntity();
+        //获得传递文件的SD卡路径
+        //先取出SD卡的根目录
+        File parent = Environment.getExternalStorageDirectory();
+        //指定父目录和文件名
+        File fileAbs = new File(parent,"something");
+        //创建传递文件 传递路径
+        FileBody fileBody = new FileBody(fileAbs);
+        //将fileBody添加到mutipartEntity中 名字和fileBody
+        mutipartEntity.addPart("file",fileBody);
+        //httpPost传递mutipartEntity
+        httpPost.setEntity(mutipartEntity);
+
+        try {
+            //接下来发送post请求返回httpResponse对象
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            //判断请求码
+            if (httpResponse.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+                //如果成功 继续任务
+                Log.d("zjj", EntityUtils.toString(httpResponse.getEntity()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void run() {
+        super.run();
+
     }
 }
