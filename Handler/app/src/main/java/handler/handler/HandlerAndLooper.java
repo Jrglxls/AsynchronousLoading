@@ -20,16 +20,19 @@ import android.widget.TextView;
 public class HandlerAndLooper extends Activity {
     //创建Handler对象 主线程中
     //不可执行耗时操作，会进入卡死状态
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            System.out.println("UI Thread" + Thread.currentThread());
-        }
-    };
+//    private Handler handler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            System.out.println("UI Thread" + Thread.currentThread());
+//        }
+//    };
+
+    //创建Handler对象
+    private Handler handler;
 
     //创建MyThread对象
-    private MyThread myThread = new MyThread();
+    private MyThread myThread ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,16 +42,29 @@ public class HandlerAndLooper extends Activity {
         textView.setText("hello handler");
         setContentView(textView);
 
+        myThread = new MyThread();
         myThread.start();
-        try {
-            //当前线程休眠
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //发送消息
-        myThread.handler.sendEmptyMessage(1);//子线程
-        handler.sendEmptyMessage(1);//主线程
+//        try {
+//            //当前线程休眠
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        //发送消息
+//        myThread.handler.sendEmptyMessage(1);//子线程
+//        handler.sendEmptyMessage(1);//主线程
+
+        //默认轮询新建looper对象
+        handler = new Handler(myThread.looper){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                System.out.println(msg);
+            }
+        };
+        handler.sendEmptyMessage(1);
+
+
 
     }
 
@@ -59,12 +75,19 @@ public class HandlerAndLooper extends Activity {
         //子线程中
         public Handler handler;
 
+        //定义looper对象
+        public Looper looper;
+
         //线程实现run方法
         @Override
         public void run() {
             super.run();
             //创建Looper
             Looper.prepare();
+
+            //指定looper对象
+            looper = Looper.myLooper();
+
             //创建Handler对象 默认情况下根据当前线程拿到Looper
             //子线程拿到Looper
             handler = new Handler(){
