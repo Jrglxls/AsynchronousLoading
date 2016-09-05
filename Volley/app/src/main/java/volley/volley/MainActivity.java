@@ -26,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
         volley_Post();
     }
 
+    //volley与activity进行关联
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //通过给定的tag值，将指点的队列全部关闭
+        RequestApplication.getHttpQueues().cancelAll("zjjpost");
+    }
+
     private void volley_Post() {
         String url = "something";
         /**
@@ -49,10 +57,9 @@ public class MainActivity extends AppCompatActivity {
             //使用post方式传递参数 getParams()方法
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
-                Map<String,String> map = new HashMap<String, String>();
-                map.put("sonething","something");
-                return map;
+                Map<String, String> hashMap = new HashMap<String, String>();
+                hashMap.put("sonething","something");
+                return hashMap;
             }
         };
         //设置请求对象tag标签 可以通过tag标签在请求队列中进行寻找
@@ -60,6 +67,29 @@ public class MainActivity extends AppCompatActivity {
         //将request添加到全局队列里
         RequestApplication.getHttpQueues().add(stringRequest);
 
+        /**
+         * 使用JSONObjectRequest
+         */
+        Map<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("sonething","something");
+        //将map转化为object对象
+        JSONObject jsonObject = new JSONObject(hashMap);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+            // TODO: 2016/9/5
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+            // TODO: 2016/9/5
+            }
+        });
+        //设置请求对象tag标签 可以通过tag标签在请求队列中进行寻找
+        jsonObjectRequest.setTag("zjjpost");
+        //将request添加到全局队列里
+        RequestApplication.getHttpQueues().add(stringRequest);
     }
 
     //使用get请求
@@ -112,5 +142,21 @@ public class MainActivity extends AppCompatActivity {
          * 使用JSONArrayRequest
          */
         //类似JSONObjectRequest
+    }
+
+    //使用二次封装
+    private void twoPackage(){
+        String url = "something";
+        VolleyRequest.RequestGet(this, url, "zjjget", new VolleyInterface(this,VolleyInterface.listener,VolleyInterface.errorListener) {
+            @Override
+            public void onSuccess(String result) {
+            // TODO: 2016/9/5
+            }
+
+            @Override
+            public void onError(VolleyError volleyError) {
+            // TODO: 2016/9/5
+            }
+        });
     }
 }

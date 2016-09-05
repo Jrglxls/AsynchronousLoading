@@ -7,7 +7,7 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Created by zhangjiajing on 2016/9/1.
- *
+ * 创建全局请求队列
  */
 public class RequestApplication extends Application {
     //创建全局的请求队列
